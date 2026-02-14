@@ -171,33 +171,31 @@ button{
 
 <script>
 
+    /* AUTO MUSIC (WORKS ON MOBILE + DESKTOP) */
+let bgMusic = document.getElementById("bgMusic");
+bgMusic.volume = 0.4;
+bgMusic.muted = true;
+
+// Try autoplay muted
+window.addEventListener("load", () => {
+    bgMusic.play().catch(()=>{});
+});
+
+// Enable sound on first touch or click
+function enableSound() {
+    bgMusic.muted = false;
+    bgMusic.play().catch(()=>{});
+    document.removeEventListener("click", enableSound);
+    document.removeEventListener("touchstart", enableSound);
+}
+
+document.addEventListener("click", enableSound);
+document.addEventListener("touchstart", enableSound);
+
+
 const herName="My Love";
 
-/* MUSIC CONTROL */
-let bgMusic=document.getElementById("bgMusic");
-bgMusic.volume=0.2; // soft romantic level
 
-function fadeInMusic(){
-bgMusic.volume=0;
-bgMusic.play().catch(()=>{});
-let fade=setInterval(()=>{
-if(bgMusic.volume<0.4){
-bgMusic.volume+=0.02;
-}else{
-clearInterval(fade);
-}
-},200);
-}
-
-function fadeOutMusic(){
-let fade=setInterval(()=>{
-if(bgMusic.volume>0.05){
-bgMusic.volume-=0.02;
-}else{
-clearInterval(fade);
-}
-},200);
-}
 
 /* HEARTS */
 function floatingHearts(speed=700){
@@ -260,7 +258,7 @@ message.innerHTML="";
 gifts.style.display="grid";
 noBtn.style.display="none";
 
-fadeInMusic();
+
 
 typeWriter(`
 Firstly Happy Valentine's Day Kandaaaa....♥️
@@ -294,7 +292,7 @@ document.getElementById("modal").style.display="flex";
 /* FINAL PROPOSAL */
 function showProposal(){
 
-fadeOutMusic(); // smooth fade out before proposal
+
 
 mainContent.classList.add("blur");
 
