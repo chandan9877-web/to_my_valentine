@@ -16,7 +16,7 @@ body {
 
 h1 {
     margin-top: 80px;
-    font-size: 30px;
+    font-size: 28px;
 }
 
 button {
@@ -29,16 +29,8 @@ button {
     transition: 0.3s;
 }
 
-#yesBtn {
-    background-color: #ff4d6d;
-    color: white;
-}
-
-#noBtn {
-    background-color: grey;
-    color: white;
-    position: absolute;
-}
+#yesBtn { background-color: #ff4d6d; color: white; }
+#noBtn { background-color: grey; color: white; position: absolute; }
 
 #message {
     display: none;
@@ -46,7 +38,7 @@ button {
     font-size: 18px;
 }
 
-/* Gifts Grid */
+/* GRID */
 .gifts {
     display: none;
     margin-top: 40px;
@@ -56,42 +48,42 @@ button {
     gap: 15px;
 }
 
-/* Gift wrapper */
+/* GIFT */
 .gift-wrapper {
     position: relative;
-    border-radius: 12px;
+    border-radius: 15px;
     overflow: hidden;
     cursor: pointer;
+    transform: scale(0.95);
+    transition: 0.3s ease;
 }
+
+.gift-wrapper:hover { transform: scale(1); }
 
 .gift-wrapper img {
     width: 100%;
     height: 170px;
     object-fit: cover;
-    display: block;
 }
 
-/* Darker overlay */
+/* Overlay */
 .overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.85); /* DARKER */
+    inset: 0;
+    background: rgba(0,0,0,0.9);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 35px;
-    color: white;
-    transition: 0.3s;
+    font-size: 40px;
+    transition: 0.6s ease;
 }
 
 .overlay.hidden {
-    display: none;
+    transform: scale(0);
+    opacity: 0;
 }
 
-/* Fullscreen modal */
+/* MODAL */
 #modal {
     display: none;
     position: fixed;
@@ -104,14 +96,26 @@ button {
 
 #modal img {
     max-width: 90%;
-    max-height: 90%;
+    max-height: 85%;
     border-radius: 15px;
 }
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+    user-select: none;
+}
+
+#prev { left: 20px; }
+#next { right: 20px; }
 
 /* Floating hearts */
 .heart {
     position: fixed;
-    color: red;
     animation: float 5s linear infinite;
 }
 
@@ -137,97 +141,52 @@ button {
 
 <div class="gifts" id="gifts">
 
-    <!-- Repeat for all images -->
-    <div class="gift-wrapper">
-        <img src="images/Rose.jpeg">
-        <div class="overlay">🎁</div>
-    </div>
-
-    <div class="gift-wrapper">
-        <img src="images/image-1.jpeg">
-        <div class="overlay">🎁</div>
-    </div>
-
-    <div class="gift-wrapper">
-        <img src="images/image-2.jpeg">
-        <div class="overlay">🎁</div>
-    </div>
-
-    <div class="gift-wrapper">
-        <img src="images/image-3.jpeg">
-        <div class="overlay">🎁</div>
-    </div>
-
-    <div class="gift-wrapper">
-        <img src="images/image-5.jpeg">
-        <div class="overlay">🎁</div>
-    </div>
-
-    <div class="gift-wrapper">
-        <img src="images/image-6.jpeg">
-        <div class="overlay">🎁</div>
-    </div>
-
-    <div class="gift-wrapper">
-        <img src="images/image-7.jpeg">
-        <div class="overlay">🎁</div>
-    </div>
-
-    <div class="gift-wrapper">
-        <img src="images/image-8.jpeg">
-        <div class="overlay">🎁</div>
-    </div>
-
-    <div class="gift-wrapper">
-        <img src="images/image-9.jpeg">
-        <div class="overlay">🎁</div>
-    </div>
-
-    <div class="gift-wrapper">
-        <img src="images/image-10.jpeg">
-        <div class="overlay">🎁</div>
-    </div>
-
-    <div class="gift-wrapper">
-        <img src="images/image-11.jpeg">
-        <div class="overlay">🎁</div>
-    </div>
-
-    <div class="gift-wrapper">
-        <img src="images/image-12.jpeg">
-        <div class="overlay">🎁</div>
-    </div>
+<!-- Your images -->
+<div class="gift-wrapper"><img src="images/Rose.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-1.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-2.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-3.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-5.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-6.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-7.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-8.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-9.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-10.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-11.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-12.jpeg"><div class="overlay">🎁</div></div>
 
 </div>
 
-<!-- Fullscreen Modal -->
-<div id="modal" onclick="closeModal()">
+<!-- Modal -->
+<div id="modal">
+    <span class="arrow" id="prev">&#10094;</span>
     <img id="modalImg">
+    <span class="arrow" id="next">&#10095;</span>
 </div>
+
+<!-- Gift Sound -->
+<audio id="giftSound" src="https://www.soundjay.com/human/sounds/applause-8.mp3"></audio>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
 let yesBtn = document.getElementById("yesBtn");
 let noBtn = document.getElementById("noBtn");
 let message = document.getElementById("message");
 let gifts = document.getElementById("gifts");
+let giftSound = document.getElementById("giftSound");
 
 let scale = 1;
 
-/* Desktop hover */
+/* No button logic (desktop + mobile) */
 noBtn.addEventListener("mouseover", moveNo);
-
-/* Mobile touch */
-noBtn.addEventListener("touchstart", function(e){
-    e.preventDefault();
-    moveNo();
-});
+noBtn.addEventListener("touchstart", e => { e.preventDefault(); moveNo(); });
 
 function moveNo() {
     let x = Math.random() * (window.innerWidth - 100);
     let y = Math.random() * (window.innerHeight - 50);
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
-
     scale += 0.1;
     yesBtn.style.transform = "scale(" + scale + ")";
 }
@@ -239,28 +198,53 @@ yesBtn.addEventListener("click", function() {
 });
 
 /* Gift logic */
-document.querySelectorAll(".gift-wrapper").forEach(wrapper => {
+let wrappers = document.querySelectorAll(".gift-wrapper");
+let currentIndex = 0;
+
+wrappers.forEach((wrapper, index) => {
     wrapper.addEventListener("click", function() {
         let overlay = this.querySelector(".overlay");
         let img = this.querySelector("img");
 
         if (!overlay.classList.contains("hidden")) {
-            overlay.classList.add("hidden"); // unwrap
+            overlay.classList.add("hidden");
+            giftSound.play();
+
+            confetti({
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.6 }
+            });
         } else {
-            openModal(img.src); // already revealed → open fullscreen
+            openModal(index);
         }
     });
 });
 
-/* Modal */
-function openModal(src) {
-    document.getElementById("modalImg").src = src;
+/* Modal logic */
+function openModal(index) {
+    currentIndex = index;
+    document.getElementById("modalImg").src = wrappers[index].querySelector("img").src;
     document.getElementById("modal").style.display = "flex";
 }
 
 function closeModal() {
     document.getElementById("modal").style.display = "none";
 }
+
+document.getElementById("modal").addEventListener("click", closeModal);
+
+document.getElementById("prev").onclick = function(e) {
+    e.stopPropagation();
+    currentIndex = (currentIndex - 1 + wrappers.length) % wrappers.length;
+    openModal(currentIndex);
+};
+
+document.getElementById("next").onclick = function(e) {
+    e.stopPropagation();
+    currentIndex = (currentIndex + 1) % wrappers.length;
+    openModal(currentIndex);
+};
 
 /* Floating hearts */
 setInterval(() => {
@@ -270,10 +254,7 @@ setInterval(() => {
     heart.style.left = Math.random() * 100 + "vw";
     heart.style.fontSize = (Math.random() * 20 + 15) + "px";
     document.body.appendChild(heart);
-
-    setTimeout(() => {
-        heart.remove();
-    }, 5000);
+    setTimeout(() => heart.remove(), 5000);
 }, 400);
 </script>
 
