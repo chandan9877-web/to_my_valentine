@@ -7,75 +7,86 @@
 
 <style>
 body {
-    text-align: center;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #ff9a9e, #fad0c4);
-    margin: 0;
-    overflow-x: hidden;
+    text-align:center;
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(to right,#ff9a9e,#fad0c4);
+    margin:0;
+    overflow-x:hidden;
 }
 
 /* Countdown */
-#countdown {
-    font-size: 50px;
-    margin-top: 150px;
+#countdown{
+    font-size:60px;
+    margin-top:150px;
+    font-weight:bold;
+    background:linear-gradient(to right,#ff4d6d,#ff9a9e);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
 }
 
-/* Main Content */
-#mainContent {
-    display: none;
-    transition: filter 0.5s ease;
-}
-
-#mainContent.blur {
-    filter: blur(6px);
-}
-
-h1 { margin-top: 40px; font-size: 28px; }
-
-button {
-    padding: 12px 25px;
-    font-size: 16px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    margin: 15px;
-    transition: 0.3s;
-}
-
-#yesBtn { background:#ff4d6d; color:white; }
-#noBtn { background:grey; color:white; position:absolute; }
-
-#message {
+/* Main */
+#mainContent{
     display:none;
-    margin-top:20px;
-    font-size:18px;
-    min-height:60px;
-    white-space:pre-line;
+    transition:filter .5s ease;
+}
+#mainContent.blur{ filter:blur(6px); }
+
+h1{
+    margin-top:40px;
+    font-size:32px;
+    background:linear-gradient(to right,#ff4d6d,#ff9a9e);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
 }
 
-.gifts {
+/* Buttons */
+button{
+    padding:12px 25px;
+    font-size:16px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    margin:15px;
+    transition:.3s;
+}
+
+#yesBtn{background:#ff4d6d;color:white;}
+#noBtn{background:#555;color:white;position:absolute;}
+
+/* Message */
+#message{
+    display:none;
+    margin-top:25px;
+    font-size:20px;
+    min-height:80px;
+    white-space:pre-line;
+    color:#b3003b;
+    font-weight:500;
+}
+
+/* Gifts */
+.gifts{
     display:none;
     margin-top:40px;
     padding:20px;
-    display:none;
     grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
     gap:15px;
 }
 
-.gift-wrapper {
+.gift-wrapper{
     position:relative;
     border-radius:15px;
     overflow:hidden;
     cursor:pointer;
 }
 
-.gift-wrapper img {
+.gift-wrapper img{
     width:100%;
     height:170px;
     object-fit:cover;
 }
 
-.overlay {
+.overlay{
     position:absolute;
     inset:0;
     background:linear-gradient(to right,#ff9a9e,#fad0c4);
@@ -83,39 +94,47 @@ button {
     align-items:center;
     justify-content:center;
     font-size:35px;
-    transition:0.5s ease;
+    transition:.5s ease;
 }
 
-.overlay.hidden {
+.overlay.hidden{
     opacity:0;
     pointer-events:none;
 }
 
-#modal {
+/* Modal */
+#modal{
     display:none;
     position:fixed;
     inset:0;
-    background:rgba(0,0,0,0.95);
+    background:rgba(0,0,0,.9);
     justify-content:center;
     align-items:center;
     z-index:999;
 }
-
-#modal img {
+#modal img{
     max-width:90%;
     max-height:85%;
     border-radius:15px;
 }
 
-.heart {
+/* Floating Hearts */
+.heart{
     position:fixed;
-    animation:float 5s linear infinite;
+    animation:float 6s linear infinite;
 }
 
-@keyframes float {
-    0% { transform:translateY(100vh); opacity:1; }
-    100% { transform:translateY(-10vh); opacity:0; }
+@keyframes float{
+    0%{transform:translateY(100vh);opacity:1;}
+    100%{transform:translateY(-10vh);opacity:0;}
 }
+
+/* Explosion */
+@keyframes explode{
+0%{transform:translate(-50%,-50%) scale(0);opacity:1;}
+100%{transform:translate(var(--x),var(--y)) scale(1.5);opacity:0;}
+}
+
 </style>
 </head>
 
@@ -137,14 +156,6 @@ button {
 <div class="gift-wrapper"><img src="images/image-1.jpeg"><div class="overlay">🎁</div></div>
 <div class="gift-wrapper"><img src="images/image-2.jpeg"><div class="overlay">🎁</div></div>
 <div class="gift-wrapper"><img src="images/image-3.jpeg"><div class="overlay">🎁</div></div>
-<div class="gift-wrapper"><img src="images/image-5.jpeg"><div class="overlay">🎁</div></div>
-<div class="gift-wrapper"><img src="images/image-6.jpeg"><div class="overlay">🎁</div></div>
-<div class="gift-wrapper"><img src="images/image-7.jpeg"><div class="overlay">🎁</div></div>
-<div class="gift-wrapper"><img src="images/image-8.jpeg"><div class="overlay">🎁</div></div>
-<div class="gift-wrapper"><img src="images/image-9.jpeg"><div class="overlay">🎁</div></div>
-<div class="gift-wrapper"><img src="images/image-10.jpeg"><div class="overlay">🎁</div></div>
-<div class="gift-wrapper"><img src="images/image-11.jpeg"><div class="overlay">🎁</div></div>
-<div class="gift-wrapper"><img src="images/image-12.jpeg"><div class="overlay">🎁</div></div>
 </div>
 
 </div>
@@ -159,7 +170,21 @@ button {
 
 <script>
 
-const herName = "My Love"; // 🔥 CHANGE HER NAME HERE
+const herName="My Love"; // change name here
+
+/* HEARTS FROM START */
+function floatingHearts(speed=700){
+setInterval(()=>{
+let heart=document.createElement("div");
+heart.className="heart";
+heart.innerHTML="❤️";
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(Math.random()*25+15)+"px";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),6000);
+},speed);
+}
+floatingHearts(600);
 
 /* Countdown */
 let count=10;
@@ -169,6 +194,7 @@ let mainContent=document.getElementById("mainContent");
 let interval=setInterval(()=>{
 count--;
 countdownEl.innerText=count;
+
 if(count<=0){
 clearInterval(interval);
 countdownEl.style.display="none";
@@ -176,15 +202,13 @@ mainContent.style.display="block";
 }
 },1000);
 
+/* Buttons */
 let yesBtn=document.getElementById("yesBtn");
 let noBtn=document.getElementById("noBtn");
 let message=document.getElementById("message");
 let gifts=document.getElementById("gifts");
 let bgMusic=document.getElementById("bgMusic");
 
-let scale=1;
-
-/* No Button Move */
 noBtn.addEventListener("mouseover",moveNo);
 noBtn.addEventListener("touchstart",e=>{e.preventDefault();moveNo();});
 
@@ -193,40 +217,6 @@ let x=Math.random()*(window.innerWidth-100);
 let y=Math.random()*(window.innerHeight-50);
 noBtn.style.left=x+"px";
 noBtn.style.top=y+"px";
-scale+=0.1;
-yesBtn.style.transform="scale("+scale+")";
-}
-
-/* Hearts Control */
-let heartInterval;
-
-function startHearts(){
-heartInterval=setInterval(()=>{
-let heart=document.createElement("div");
-heart.className="heart";
-heart.innerHTML="❤️";
-heart.style.left=Math.random()*100+"vw";
-heart.style.fontSize=(Math.random()*20+15)+"px";
-document.body.appendChild(heart);
-setTimeout(()=>heart.remove(),5000);
-},800);
-}
-
-function stopHearts(){
-clearInterval(heartInterval);
-}
-
-/* Music Fade */
-function fadeInMusic(){
-bgMusic.volume=0;
-bgMusic.play();
-let fade=setInterval(()=>{
-if(bgMusic.volume<1){
-bgMusic.volume+=0.05;
-}else{
-clearInterval(fade);
-}
-},200);
 }
 
 /* Typewriter */
@@ -237,21 +227,21 @@ setTimeout(()=>typeWriter(text,i+1),35);
 }
 }
 
+/* YES CLICK */
 yesBtn.addEventListener("click",()=>{
 message.style.display="block";
 message.innerHTML="";
 gifts.style.display="grid";
 noBtn.style.display="none";
-fadeInMusic();
-startHearts();
+bgMusic.play();
 
-typeWriter(`You just made my life brighter ❤️
-I promise to stand by you forever 😌
-Happy Valentine's Day 💕`);
+typeWriter(`You are my today, tomorrow and forever ❤️
+Every heartbeat whispers your name 💕
+Will you walk with me through this beautiful life? 🌹`);
 });
 
-/* Gift Logic */
-let openedCount=0;
+/* Gifts */
+let opened=0;
 let wrappers=document.querySelectorAll(".gift-wrapper");
 
 wrappers.forEach(wrapper=>{
@@ -261,10 +251,9 @@ let img=this.querySelector("img");
 
 if(!overlay.classList.contains("hidden")){
 overlay.classList.add("hidden");
-openedCount++;
-
-if(openedCount===wrappers.length){
-setTimeout(showProposalScene,1000);
+opened++;
+if(opened===wrappers.length){
+setTimeout(showProposal,1000);
 }
 }else{
 document.getElementById("modalImg").src=img.src;
@@ -274,9 +263,7 @@ document.getElementById("modal").style.display="flex";
 });
 
 /* FINAL PROPOSAL */
-function showProposalScene(){
-
-stopHearts();
+function showProposal(){
 mainContent.classList.add("blur");
 
 let scene=document.createElement("div");
@@ -290,46 +277,34 @@ scene.style.alignItems="center";
 scene.style.zIndex="9999";
 
 scene.innerHTML=`
-<div style="font-size:70px;">🧎‍♂️💍 👧</div>
-<div style="margin-top:25px;font-size:32px;color:white;font-weight:bold;">
+<div style="font-size:80px;">🧎‍♂️💍 👧</div>
+<div style="margin-top:25px;font-size:34px;color:white;font-weight:bold;text-align:center;">
 Will you marry me, ${herName}? 💖
+<br><br>
+You are my once in a lifetime 🌹
 </div>
 `;
 
 document.body.appendChild(scene);
 
-setTimeout(()=>{
-scene.innerHTML=`
-<div style="font-size:70px;">💑</div>
-<div style="margin-top:25px;font-size:32px;color:white;font-weight:bold;">
-Forever Starts Now ❤️
-</div>
-`;
 heartExplosion();
-},3000);
-
 }
 
+/* Explosion */
 function heartExplosion(){
-for(let i=0;i<60;i++){
+for(let i=0;i<70;i++){
 let heart=document.createElement("div");
 heart.innerHTML="❤️";
 heart.style.position="fixed";
 heart.style.left="50%";
 heart.style.top="50%";
 heart.style.fontSize=(Math.random()*30+20)+"px";
+heart.style.setProperty("--x",(Math.random()*800-400)+"px");
+heart.style.setProperty("--y",(Math.random()*800-400)+"px");
 heart.style.animation="explode 3s ease-out forwards";
 document.body.appendChild(heart);
 setTimeout(()=>heart.remove(),3000);
 }
-
-let style=document.createElement("style");
-style.innerHTML=`
-@keyframes explode{
-0%{transform:translate(-50%,-50%) scale(0);opacity:1;}
-100%{transform:translate(${Math.random()*800-400}px,${Math.random()*800-400}px) scale(1.5);opacity:0;}
-}`;
-document.head.appendChild(style);
 }
 
 </script>
