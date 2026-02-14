@@ -256,6 +256,8 @@ wrappers.forEach(wrapper => {
 
 function showRoseAnimation(){
 
+    document.body.style.filter = "blur(6px)";
+
     let scene = document.createElement("div");
     scene.style.position = "fixed";
     scene.style.inset = "0";
@@ -264,34 +266,38 @@ function showRoseAnimation(){
     scene.style.justifyContent = "center";
     scene.style.alignItems = "center";
     scene.style.flexDirection = "column";
-    scene.style.zIndex = "5000";
-    scene.style.overflow = "hidden";
+    scene.style.zIndex = "9999";
+    scene.style.animation = "fadeInScene 1s ease";
 
     scene.innerHTML = `
-        <div id="stage" style="position:relative; width:320px; height:180px;">
-            <div id="boy" style="position:absolute; left:0; bottom:0; font-size:60px;">👦🌹</div>
-            <div id="girl" style="position:absolute; right:0; bottom:0; font-size:60px;">👧</div>
+        <div id="stage" style="position:relative; width:340px; height:200px;">
+            <div id="boy" style="position:absolute; left:0; bottom:0; font-size:70px;">👦🌹</div>
+            <div id="girl" style="position:absolute; right:0; bottom:0; font-size:70px;">👧</div>
         </div>
-        <div id="loveText" style="margin-top:25px; font-size:28px; color:white; font-weight:bold;"></div>
+
+        <div id="proposalText" style="margin-top:30px; font-size:30px; color:white; font-weight:bold;"></div>
+
+        <div id="proposalButtons" style="margin-top:20px; display:none;">
+            <button id="marryYes" style="padding:10px 20px; font-size:18px; background:white; color:#ff4d6d; border:none; border-radius:8px; margin:10px;">YES ❤️</button>
+            <button id="marryNo" style="padding:10px 20px; font-size:18px; background:black; color:white; border:none; border-radius:8px; position:relative;">NO 😢</button>
+        </div>
     `;
 
     document.body.appendChild(scene);
 
     let boy = scene.querySelector("#boy");
     let girl = scene.querySelector("#girl");
-    let text = scene.querySelector("#loveText");
+    let proposalText = scene.querySelector("#proposalText");
+    let proposalButtons = scene.querySelector("#proposalButtons");
 
-    /* Slight music boost for drama */
-    if(bgMusic){
-        bgMusic.volume = 1;
-    }
+    /* Dramatic music boost */
+    if(bgMusic) bgMusic.volume = 1;
 
-    /* Boy walks */
-    let position = 0;
+    let pos = 0;
     let walk = setInterval(()=>{
-        position += 4;
-        boy.style.left = position + "px";
-        if(position >= 130){
+        pos += 4;
+        boy.style.left = pos + "px";
+        if(pos >= 140){
             clearInterval(walk);
             giveRose();
         }
@@ -300,51 +306,96 @@ function showRoseAnimation(){
     function giveRose(){
         boy.innerHTML = "👦";
         girl.innerHTML = "👧🌹";
-        setTimeout(hug,1000);
+        setTimeout(hug,1200);
     }
 
     function hug(){
         boy.innerHTML = "🤗";
         girl.innerHTML = "🤗";
-        setTimeout(kiss,1200);
+        setTimeout(kiss,1500);
     }
 
     function kiss(){
         boy.innerHTML = "💑";
         girl.innerHTML = "";
-        text.innerHTML = "Forever With You ❤️";
-        heartExplosion();
+        proposalText.innerHTML = `Will you marry me, ${herName}? 💍`;
+        proposalButtons.style.display = "block";
+        sparkleEffect();
     }
 
+    /* Sparkles */
+    function sparkleEffect(){
+        let sparkleInterval = setInterval(()=>{
+            let star = document.createElement("div");
+            star.innerHTML = "✨";
+            star.style.position = "fixed";
+            star.style.left = Math.random()*100+"vw";
+            star.style.top = Math.random()*100+"vh";
+            star.style.fontSize = (Math.random()*20+15)+"px";
+            star.style.animation = "fadeStar 2s ease forwards";
+            document.body.appendChild(star);
+            setTimeout(()=>star.remove(),2000);
+        },200);
+
+        setTimeout(()=>clearInterval(sparkleInterval),5000);
+    }
+
+    /* YES button */
+    scene.querySelector("#marryYes").addEventListener("click", ()=>{
+        proposalText.innerHTML = `Forever starts now, ${herName} ❤️`;
+        heartExplosion();
+        setTimeout(()=>{
+            scene.remove();
+            document.body.style.filter = "none";
+        },5000);
+    });
+
+    /* NO button runs away */
+    let noBtn2 = scene.querySelector("#marryNo");
+    noBtn2.addEventListener("mouseover", moveNoBtn);
+    noBtn2.addEventListener("touchstart", e => { e.preventDefault(); moveNoBtn(); });
+
+    function moveNoBtn(){
+        noBtn2.style.position = "absolute";
+        noBtn2.style.left = Math.random()*200 + "px";
+        noBtn2.style.top = Math.random()*100 + "px";
+    }
+
+    /* Heart explosion */
     function heartExplosion(){
-        for(let i=0;i<35;i++){
+        for(let i=0;i<50;i++){
             let heart = document.createElement("div");
             heart.innerHTML = "❤️";
             heart.style.position = "fixed";
             heart.style.left = "50%";
             heart.style.top = "50%";
-            heart.style.fontSize = (Math.random()*25+20)+"px";
+            heart.style.fontSize = (Math.random()*30+20)+"px";
             heart.style.transform = "translate(-50%, -50%)";
             heart.style.animation = "explode 3s ease-out forwards";
             document.body.appendChild(heart);
             setTimeout(()=>heart.remove(),3000);
         }
-
-        let style = document.createElement("style");
-        style.innerHTML = `
-            @keyframes explode {
-                0% { transform: translate(-50%, -50%) scale(0); opacity:1; }
-                100% { transform: translate(${Math.random()*600-300}px, ${Math.random()*600-300}px) scale(1.5); opacity:0; }
-            }
-        `;
-        document.head.appendChild(style);
     }
 
-    /* Auto close scene after 8 seconds */
-    setTimeout(()=>{
-        scene.remove();
-    },8000);
+    /* Keyframes */
+    let style = document.createElement("style");
+    style.innerHTML = `
+        @keyframes explode {
+            0% { transform: translate(-50%, -50%) scale(0); opacity:1; }
+            100% { transform: translate(${Math.random()*800-400}px, ${Math.random()*800-400}px) scale(1.5); opacity:0; }
+        }
+        @keyframes fadeStar {
+            0% { opacity:1; }
+            100% { opacity:0; }
+        }
+        @keyframes fadeInScene {
+            from { opacity:0; transform:scale(0.8); }
+            to { opacity:1; transform:scale(1); }
+        }
+    `;
+    document.head.appendChild(style);
 }
+
 
 </script>
 
