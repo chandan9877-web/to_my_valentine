@@ -10,6 +10,7 @@ body {
     font-family: Arial, sans-serif;
     background: linear-gradient(to right, #ff9a9e, #fad0c4);
     overflow: hidden;
+    margin: 0;
 }
 
 h1 {
@@ -54,6 +55,19 @@ button {
     margin: 15px;
     cursor: pointer;
 }
+
+/* Floating hearts */
+.heart {
+    position: absolute;
+    color: red;
+    animation: float 5s linear infinite;
+    font-size: 20px;
+}
+
+@keyframes float {
+    0% { transform: translateY(100vh); opacity: 1; }
+    100% { transform: translateY(-10vh); opacity: 0; }
+}
 </style>
 </head>
 
@@ -65,8 +79,9 @@ button {
 <button id="noBtn">No 😢</button>
 
 <div id="message">
-    <p>You just made my day the happiest ever ❤️</p>
-    <p>I promise to annoy you forever 😌</p>
+    <p>You just made my life brighter ❤️</p>
+    <p>I promise to stand by you, laugh with you, and annoy you forever 😌</p>
+    <p>Happy Valentine's Day 💕</p>
 </div>
 
 <div class="gifts" id="gifts">
@@ -75,22 +90,29 @@ button {
     <img src="https://i.imgur.com/4AiXzf8.jpeg" class="gift" onclick="reveal(this)">
 </div>
 
-<script>
+<!-- Romantic Background Music -->
+<audio id="bgMusic" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mp3">
+</audio>
 
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
 let yesBtn = document.getElementById("yesBtn");
 let noBtn = document.getElementById("noBtn");
 let message = document.getElementById("message");
 let gifts = document.getElementById("gifts");
+let music = document.getElementById("bgMusic");
 
 let scale = 1;
 
 noBtn.addEventListener("mouseover", function() {
-    let x = Math.random() * window.innerWidth;
-    let y = Math.random() * window.innerHeight;
+    let x = Math.random() * (window.innerWidth - 100);
+    let y = Math.random() * (window.innerHeight - 50);
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
 
-    scale += 0.2;
+    scale += 0.15;
     yesBtn.style.transform = "scale(" + scale + ")";
 });
 
@@ -98,11 +120,34 @@ yesBtn.addEventListener("click", function() {
     message.style.display = "block";
     gifts.style.display = "block";
     noBtn.style.display = "none";
+
+    music.play();
+
+    confetti({
+        particleCount: 200,
+        spread: 100,
+        origin: { y: 0.6 }
+    });
 });
 
+// Reveal gift image
 function reveal(element) {
     element.src = "https://i.imgur.com/Qr71crq.jpg";
 }
+
+// Floating hearts generator
+setInterval(() => {
+    let heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (Math.random() * 20 + 15) + "px";
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 5000);
+}, 300);
 
 </script>
 
