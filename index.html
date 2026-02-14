@@ -173,7 +173,7 @@ button {
 </audio>
 
 <script>
-/* 10 SECOND COUNTDOWN */
+/* 10 sec countdown */
 let count = 10;
 let countdownEl = document.getElementById("countdown");
 let mainContent = document.getElementById("mainContent");
@@ -196,6 +196,7 @@ let bgMusic = document.getElementById("bgMusic");
 
 let scale = 1;
 
+/* No button movement */
 noBtn.addEventListener("mouseover", moveNo);
 noBtn.addEventListener("touchstart", e => { e.preventDefault(); moveNo(); });
 
@@ -208,27 +209,112 @@ function moveNo(){
     yesBtn.style.transform = "scale(" + scale + ")";
 }
 
+/* Music fade-in */
+function fadeInMusic() {
+    bgMusic.volume = 0;
+    bgMusic.play();
+    let fade = setInterval(() => {
+        if (bgMusic.volume < 1) {
+            bgMusic.volume += 0.05;
+        } else {
+            clearInterval(fade);
+        }
+    }, 200);
+}
+
+/* Typewriter */
+function typeWriter(text, i=0){
+    if(i < text.length){
+        message.innerHTML += text.charAt(i);
+        setTimeout(()=>typeWriter(text, i+1), 40);
+    }
+}
+
 yesBtn.addEventListener("click", function(){
-    message.style.display = "block";
     gifts.style.display = "grid";
     noBtn.style.display = "none";
-    bgMusic.play();
+    fadeInMusic();
+    typeWriter("You just made my life brighter ❤️\nI promise to stand by you forever 😌\nHappy Valentine's Day 💕");
 });
 
-/* Gift Logic */
-document.querySelectorAll(".gift-wrapper").forEach(wrapper => {
+/* Track opened gifts */
+let openedCount = 0;
+let wrappers = document.querySelectorAll(".gift-wrapper");
+
+wrappers.forEach(wrapper => {
     wrapper.addEventListener("click", function(){
         let overlay = this.querySelector(".overlay");
         let img = this.querySelector("img");
 
         if(!overlay.classList.contains("hidden")){
             overlay.classList.add("hidden");
+            openedCount++;
+
+            if(openedCount === wrappers.length){
+                setTimeout(showRoseAnimation, 800);
+            }
         } else {
             document.getElementById("modalImg").src = img.src;
             document.getElementById("modal").style.display = "flex";
         }
     });
 });
+
+/* 🌹 ROSE ANIMATION */
+function showRoseAnimation(){
+
+    let roseScreen = document.createElement("div");
+    roseScreen.style.position = "fixed";
+    roseScreen.style.inset = "0";
+    roseScreen.style.background = "linear-gradient(to right, #ff4d6d, #ff9a9e)";
+    roseScreen.style.display = "flex";
+    roseScreen.style.flexDirection = "column";
+    roseScreen.style.justifyContent = "center";
+    roseScreen.style.alignItems = "center";
+    roseScreen.style.color = "white";
+    roseScreen.style.fontSize = "35px";
+    roseScreen.style.zIndex = "2000";
+    roseScreen.style.animation = "fadeIn 1s ease";
+
+    roseScreen.innerHTML = `
+        <div style="font-size:60px;">🌹🌹🌹</div>
+        <div style="margin-top:20px;">These Roses Are For You ❤️</div>
+    `;
+
+    document.body.appendChild(roseScreen);
+
+    /* Falling rose petals */
+    let petalInterval = setInterval(()=>{
+        let petal = document.createElement("div");
+        petal.innerHTML = "🌹";
+        petal.style.position = "fixed";
+        petal.style.left = Math.random()*100 + "vw";
+        petal.style.fontSize = (Math.random()*25+20)+"px";
+        petal.style.top = "-50px";
+        petal.style.animation = "fall 5s linear forwards";
+        document.body.appendChild(petal);
+
+        setTimeout(()=>petal.remove(),5000);
+    },300);
+
+    /* Add falling animation */
+    let style = document.createElement("style");
+    style.innerHTML = `
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
+    /* Remove screen after 6 sec */
+    setTimeout(()=>{
+        clearInterval(petalInterval);
+        roseScreen.remove();
+    },6000);
+}
 
 /* Floating hearts */
 setInterval(()=>{
@@ -241,6 +327,7 @@ setInterval(()=>{
     setTimeout(()=>heart.remove(),5000);
 },400);
 </script>
+
 
 </body>
 </html>
