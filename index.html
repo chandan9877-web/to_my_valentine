@@ -16,7 +16,7 @@ body {
 
 h1 {
     margin-top: 80px;
-    font-size: 32px;
+    font-size: 30px;
 }
 
 button {
@@ -43,20 +43,20 @@ button {
 #message {
     display: none;
     margin-top: 30px;
-    font-size: 20px;
+    font-size: 18px;
 }
 
-/* GIFTS GRID */
+/* Gifts Grid */
 .gifts {
-    display: none; /* hidden initially */
+    display: none;
     margin-top: 40px;
     padding: 20px;
-    display: none;
+    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 15px;
 }
 
-/* Wrapped style */
+/* Gift wrapper */
 .gift-wrapper {
     position: relative;
     border-radius: 12px;
@@ -66,29 +66,46 @@ button {
 
 .gift-wrapper img {
     width: 100%;
-    height: 160px;
+    height: 170px;
     object-fit: cover;
     display: block;
 }
 
-/* Overlay wrap */
+/* Darker overlay */
 .overlay {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(255, 77, 109, 0.85);
+    background: rgba(0, 0, 0, 0.85); /* DARKER */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 30px;
+    font-size: 35px;
     color: white;
     transition: 0.3s;
 }
 
 .overlay.hidden {
     display: none;
+}
+
+/* Fullscreen modal */
+#modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+#modal img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 15px;
 }
 
 /* Floating hearts */
@@ -121,66 +138,71 @@ button {
 <div class="gifts" id="gifts">
 
     <!-- Repeat for all images -->
-    <div class="gift-wrapper" onclick="reveal(this)">
+    <div class="gift-wrapper">
         <img src="images/Rose.jpeg">
         <div class="overlay">🎁</div>
     </div>
 
-    <div class="gift-wrapper" onclick="reveal(this)">
+    <div class="gift-wrapper">
         <img src="images/image-1.jpeg">
         <div class="overlay">🎁</div>
     </div>
 
-    <div class="gift-wrapper" onclick="reveal(this)">
+    <div class="gift-wrapper">
         <img src="images/image-2.jpeg">
         <div class="overlay">🎁</div>
     </div>
 
-    <div class="gift-wrapper" onclick="reveal(this)">
+    <div class="gift-wrapper">
         <img src="images/image-3.jpeg">
         <div class="overlay">🎁</div>
     </div>
 
-    <div class="gift-wrapper" onclick="reveal(this)">
+    <div class="gift-wrapper">
         <img src="images/image-5.jpeg">
         <div class="overlay">🎁</div>
     </div>
 
-    <div class="gift-wrapper" onclick="reveal(this)">
+    <div class="gift-wrapper">
         <img src="images/image-6.jpeg">
         <div class="overlay">🎁</div>
     </div>
 
-    <div class="gift-wrapper" onclick="reveal(this)">
+    <div class="gift-wrapper">
         <img src="images/image-7.jpeg">
         <div class="overlay">🎁</div>
     </div>
 
-    <div class="gift-wrapper" onclick="reveal(this)">
+    <div class="gift-wrapper">
         <img src="images/image-8.jpeg">
         <div class="overlay">🎁</div>
     </div>
 
-    <div class="gift-wrapper" onclick="reveal(this)">
+    <div class="gift-wrapper">
         <img src="images/image-9.jpeg">
         <div class="overlay">🎁</div>
     </div>
 
-    <div class="gift-wrapper" onclick="reveal(this)">
+    <div class="gift-wrapper">
         <img src="images/image-10.jpeg">
         <div class="overlay">🎁</div>
     </div>
 
-    <div class="gift-wrapper" onclick="reveal(this)">
+    <div class="gift-wrapper">
         <img src="images/image-11.jpeg">
         <div class="overlay">🎁</div>
     </div>
 
-    <div class="gift-wrapper" onclick="reveal(this)">
+    <div class="gift-wrapper">
         <img src="images/image-12.jpeg">
         <div class="overlay">🎁</div>
     </div>
 
+</div>
+
+<!-- Fullscreen Modal -->
+<div id="modal" onclick="closeModal()">
+    <img id="modalImg">
 </div>
 
 <script>
@@ -216,9 +238,28 @@ yesBtn.addEventListener("click", function() {
     noBtn.style.display = "none";
 });
 
-/* Reveal individual gift */
-function reveal(wrapper) {
-    wrapper.querySelector(".overlay").classList.add("hidden");
+/* Gift logic */
+document.querySelectorAll(".gift-wrapper").forEach(wrapper => {
+    wrapper.addEventListener("click", function() {
+        let overlay = this.querySelector(".overlay");
+        let img = this.querySelector("img");
+
+        if (!overlay.classList.contains("hidden")) {
+            overlay.classList.add("hidden"); // unwrap
+        } else {
+            openModal(img.src); // already revealed → open fullscreen
+        }
+    });
+});
+
+/* Modal */
+function openModal(src) {
+    document.getElementById("modalImg").src = src;
+    document.getElementById("modal").style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
 }
 
 /* Floating hearts */
