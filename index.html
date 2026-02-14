@@ -1,1 +1,110 @@
-hello
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine ❤️</title>
+
+<style>
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #ff9a9e, #fad0c4);
+    overflow: hidden;
+}
+
+h1 {
+    margin-top: 100px;
+    font-size: 40px;
+}
+
+button {
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 20px;
+    transition: 0.3s;
+}
+
+#yesBtn {
+    background-color: #ff4d6d;
+    color: white;
+}
+
+#noBtn {
+    background-color: grey;
+    color: white;
+    position: absolute;
+}
+
+#message {
+    display: none;
+    margin-top: 40px;
+    font-size: 24px;
+}
+
+.gifts {
+    margin-top: 30px;
+    display: none;
+}
+
+.gift {
+    width: 120px;
+    margin: 15px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Will you be my Valentine? ❤️</h1>
+
+<button id="yesBtn">Yes 😍</button>
+<button id="noBtn">No 😢</button>
+
+<div id="message">
+    <p>You just made my day the happiest ever ❤️</p>
+    <p>I promise to annoy you forever 😌</p>
+</div>
+
+<div class="gifts" id="gifts">
+    <img src="https://i.imgur.com/4AiXzf8.jpeg" class="gift" onclick="reveal(this)">
+    <img src="https://i.imgur.com/4AiXzf8.jpeg" class="gift" onclick="reveal(this)">
+    <img src="https://i.imgur.com/4AiXzf8.jpeg" class="gift" onclick="reveal(this)">
+</div>
+
+<script>
+
+let yesBtn = document.getElementById("yesBtn");
+let noBtn = document.getElementById("noBtn");
+let message = document.getElementById("message");
+let gifts = document.getElementById("gifts");
+
+let scale = 1;
+
+noBtn.addEventListener("mouseover", function() {
+    let x = Math.random() * window.innerWidth;
+    let y = Math.random() * window.innerHeight;
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+
+    scale += 0.2;
+    yesBtn.style.transform = "scale(" + scale + ")";
+});
+
+yesBtn.addEventListener("click", function() {
+    message.style.display = "block";
+    gifts.style.display = "block";
+    noBtn.style.display = "none";
+});
+
+function reveal(element) {
+    element.src = "https://i.imgur.com/Qr71crq.jpg";
+}
+
+</script>
+
+</body>
+</html>
