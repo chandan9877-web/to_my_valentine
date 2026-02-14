@@ -1,9 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be My Valentine ❤️</title>
+
+<style>
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #ff9a9e, #fad0c4);
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* Countdown */
+#countdown {
+    font-size: 50px;
+    margin-top: 150px;
+}
+
+/* Main Content Hidden Initially */
+#mainContent {
+    display: none;
+}
+
+h1 {
+    margin-top: 40px;
+    font-size: 28px;
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 15px;
+    transition: 0.3s;
+}
+
+#yesBtn {
+    background-color: #ff4d6d;
+    color: white;
+}
+
+#noBtn {
+    background-color: grey;
+    color: white;
+    position: absolute;
+}
+
+#message {
+    display: none;
+    margin-top: 20px;
+    font-size: 18px;
+    min-height: 60px;
+    white-space: pre-line;
+}
+
+/* Gifts Hidden Initially */
+.gifts {
+    display: none;
+    margin-top: 40px;
+    padding: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+}
+
+.gift-wrapper {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.gift-wrapper img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, #ff9a9e, #fad0c4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
+    transition: 0.5s ease;
+}
+
+.overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+#modal img {
+    max-width: 90%;
+    max-height: 85%;
+    border-radius: 15px;
+}
+
+.heart {
+    position: fixed;
+    animation: float 5s linear infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(100vh); opacity: 1; }
+    100% { transform: translateY(-10vh); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<div id="countdown">10</div>
+
+<div id="mainContent">
+
+<h1>Will you be my Valentine? ❤️</h1>
+
+<button id="yesBtn">Yes 😍</button>
+<button id="noBtn">No 😢</button>
+
+<div id="message"></div>
+
+<div class="gifts" id="gifts">
+<div class="gift-wrapper"><img src="images/Rose.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-1.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-2.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-3.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-5.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-6.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-7.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-8.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-9.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-10.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-11.jpeg"><div class="overlay">🎁</div></div>
+<div class="gift-wrapper"><img src="images/image-12.jpeg"><div class="overlay">🎁</div></div>
+</div>
+
+</div>
+
+<div id="modal" onclick="this.style.display='none'">
+    <img id="modalImg">
+</div>
+
+<audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let count = 10;
+let countdownEl = document.getElementById("countdown");
+let mainContent = document.getElementById("mainContent");
+
+let interval = setInterval(() => {
+    count--;
+    countdownEl.innerText = count;
+    if(count <= 0){
+        clearInterval(interval);
+        countdownEl.style.display = "none";
+        mainContent.style.display = "block";
+    }
+},1000);
+
+let yesBtn = document.getElementById("yesBtn");
+let noBtn = document.getElementById("noBtn");
+let message = document.getElementById("message");
+let gifts = document.getElementById("gifts");
+let bgMusic = document.getElementById("bgMusic");
+
+let scale = 1;
+
+noBtn.addEventListener("mouseover", moveNo);
+noBtn.addEventListener("touchstart", e => { e.preventDefault(); moveNo(); });
+
+function moveNo(){
+    let x = Math.random() * (window.innerWidth - 100);
+    let y = Math.random() * (window.innerHeight - 50);
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+    scale += 0.1;
+    yesBtn.style.transform = "scale(" + scale + ")";
+}
+
+function fadeInMusic() {
+    bgMusic.volume = 0;
+    bgMusic.play();
+    let fade = setInterval(() => {
+        if (bgMusic.volume < 1) {
+            bgMusic.volume += 0.05;
+        } else {
+            clearInterval(fade);
+        }
+    }, 200);
+}
+
+function typeWriter(text, i=0){
+    if(i < text.length){
+        message.innerHTML += text.charAt(i);
+        setTimeout(()=>typeWriter(text, i+1), 35);
+    }
+}
+
+yesBtn.addEventListener("click", function(){
+    message.style.display = "block";   // FIXED
+    message.innerHTML = "";
+    gifts.style.display = "grid";
+    noBtn.style.display = "none";
+    fadeInMusic();
+
+    typeWriter(
+`You just made my life brighter ❤️
+I promise to stand by you forever 😌
+Happy Valentine's Day 💕`
+    );
+});
+
+/* Gift Logic */
+let openedCount = 0;
+let wrappers = document.querySelectorAll(".gift-wrapper");
+
+wrappers.forEach(wrapper => {
+    wrapper.addEventListener("click", function(){
+        let overlay = this.querySelector(".overlay");
+        let img = this.querySelector("img");
+
+        if(!overlay.classList.contains("hidden")){
+            overlay.classList.add("hidden");
+            openedCount++;
+
+            if(openedCount === wrappers.length){
+                setTimeout(showRoseAnimation, 800);
+            }
+        } else {
+            document.getElementById("modalImg").src = img.src;
+            document.getElementById("modal").style.display = "flex";
+        }
+    });
+});
+
 function showRoseAnimation(){
 
     let scene = document.createElement("div");
     scene.style.position = "fixed";
     scene.style.inset = "0";
-    scene.style.background = "linear-gradient(to top, #ff4d6d, #ff9a9e)";
+    scene.style.background = "linear-gradient(to right, #ff4d6d, #ff9a9e)";
     scene.style.display = "flex";
     scene.style.justifyContent = "center";
     scene.style.alignItems = "center";
@@ -12,66 +268,65 @@ function showRoseAnimation(){
     scene.style.overflow = "hidden";
 
     scene.innerHTML = `
-        <div id="stage" style="position:relative; width:350px; height:200px;">
-            <div id="boy" style="position:absolute; left:0; bottom:0; font-size:60px;">🧑‍🦱🌹</div>
-            <div id="girl" style="position:absolute; right:0; bottom:0; font-size:60px;">👩</div>
+        <div id="stage" style="position:relative; width:320px; height:180px;">
+            <div id="boy" style="position:absolute; left:0; bottom:0; font-size:60px;">👦🌹</div>
+            <div id="girl" style="position:absolute; right:0; bottom:0; font-size:60px;">👧</div>
         </div>
-        <div id="loveText" style="margin-top:20px; font-size:28px; color:white;"></div>
+        <div id="loveText" style="margin-top:25px; font-size:28px; color:white; font-weight:bold;"></div>
     `;
 
     document.body.appendChild(scene);
 
     let boy = scene.querySelector("#boy");
     let girl = scene.querySelector("#girl");
-    let loveText = scene.querySelector("#loveText");
+    let text = scene.querySelector("#loveText");
 
-    /* Dramatic music boost */
+    /* Slight music boost for drama */
     if(bgMusic){
         bgMusic.volume = 1;
     }
 
     /* Boy walks */
-    let pos = 0;
+    let position = 0;
     let walk = setInterval(()=>{
-        pos += 4;
-        boy.style.left = pos + "px";
-        if(pos >= 150){
+        position += 4;
+        boy.style.left = position + "px";
+        if(position >= 130){
             clearInterval(walk);
             giveRose();
         }
     },40);
 
     function giveRose(){
-        boy.innerHTML = "🧑‍🦱";
-        girl.innerHTML = "👩🌹";
-        setTimeout(hug,1200);
+        boy.innerHTML = "👦";
+        girl.innerHTML = "👧🌹";
+        setTimeout(hug,1000);
     }
 
     function hug(){
         boy.innerHTML = "🤗";
         girl.innerHTML = "🤗";
-        setTimeout(kiss,1500);
+        setTimeout(kiss,1200);
     }
 
     function kiss(){
         boy.innerHTML = "💑";
         girl.innerHTML = "";
-        loveText.innerHTML = "Will You Be Mine Forever? ❤️";
+        text.innerHTML = "Forever With You ❤️";
         heartExplosion();
     }
 
     function heartExplosion(){
-        for(let i=0;i<40;i++){
+        for(let i=0;i<35;i++){
             let heart = document.createElement("div");
             heart.innerHTML = "❤️";
             heart.style.position = "fixed";
             heart.style.left = "50%";
             heart.style.top = "50%";
             heart.style.fontSize = (Math.random()*25+20)+"px";
-            heart.style.transform = `translate(-50%, -50%)`;
+            heart.style.transform = "translate(-50%, -50%)";
             heart.style.animation = "explode 3s ease-out forwards";
             document.body.appendChild(heart);
-
             setTimeout(()=>heart.remove(),3000);
         }
 
@@ -85,8 +340,13 @@ function showRoseAnimation(){
         document.head.appendChild(style);
     }
 
-    /* Remove scene after 8 sec */
+    /* Auto close scene after 8 seconds */
     setTimeout(()=>{
         scene.remove();
     },8000);
 }
+
+</script>
+
+</body>
+</html>
