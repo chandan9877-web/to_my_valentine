@@ -12,16 +12,21 @@ body {
     background: linear-gradient(to right, #ff9a9e, #fad0c4);
     margin: 0;
     overflow-x: hidden;
-    opacity: 0;
-    transition: opacity 2s ease;
 }
 
-body.loaded {
-    opacity: 1;
+/* Countdown */
+#countdown {
+    font-size: 50px;
+    margin-top: 150px;
+}
+
+/* Main Content Hidden Initially */
+#mainContent {
+    display: none;
 }
 
 h1 {
-    margin-top: 80px;
+    margin-top: 40px;
     font-size: 28px;
 }
 
@@ -35,37 +40,33 @@ button {
     transition: 0.3s;
 }
 
-#yesBtn { background-color: #ff4d6d; color: white; }
-#noBtn { background-color: grey; color: white; position: absolute; }
+#yesBtn {
+    background-color: #ff4d6d;
+    color: white;
+}
+
+#noBtn {
+    background-color: grey;
+    color: white;
+    position: absolute;
+}
 
 #message {
     display: none;
-    margin-top: 30px;
+    margin-top: 20px;
     font-size: 18px;
-    animation: fadeIn 2s ease;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Countdown */
-#countdown {
-    font-size: 40px;
-    margin-top: 150px;
-}
-
-/* Gifts */
+/* Gifts Hidden Initially */
 .gifts {
     display: none;
     margin-top: 40px;
     padding: 20px;
-    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 15px;
 }
 
+/* Gift Wrapper */
 .gift-wrapper {
     position: relative;
     border-radius: 15px;
@@ -79,20 +80,21 @@ button {
     object-fit: cover;
 }
 
+/* NEW Background-like Wrap Color */
 .overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.9);
+    background: linear-gradient(to right, #ff9a9e, #fad0c4);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 40px;
-    transition: 0.6s ease;
+    font-size: 35px;
+    transition: 0.5s ease;
 }
 
 .overlay.hidden {
-    transform: scale(0);
     opacity: 0;
+    pointer-events: none;
 }
 
 /* Modal */
@@ -112,37 +114,6 @@ button {
     border-radius: 15px;
 }
 
-.arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 40px;
-    color: white;
-    cursor: pointer;
-}
-
-#prev { left: 20px; }
-#next { right: 20px; }
-
-/* Love Popup */
-#lovePopup {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(255,0,90,0.95);
-    color: white;
-    font-size: 50px;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    animation: zoomIn 1s ease;
-}
-
-@keyframes zoomIn {
-    from { transform: scale(0); }
-    to { transform: scale(1); }
-}
-
 /* Floating hearts */
 .heart {
     position: fixed;
@@ -158,12 +129,14 @@ button {
 
 <body>
 
-<div id="countdown">3</div>
+<div id="countdown">10</div>
 
-<h1 style="display:none;" id="mainTitle">Will you be my Valentine? ❤️</h1>
+<div id="mainContent">
 
-<button id="yesBtn" style="display:none;">Yes 😍</button>
-<button id="noBtn" style="display:none;">No 😢</button>
+<h1>Will you be my Valentine? ❤️</h1>
+
+<button id="yesBtn">Yes 😍</button>
+<button id="noBtn">No 😢</button>
 
 <div id="message">
     <p>You just made my life brighter ❤️</p>
@@ -188,36 +161,30 @@ button {
 
 </div>
 
-<div id="modal">
-<span class="arrow" id="prev">&#10094;</span>
-<img id="modalImg">
-<span class="arrow" id="next">&#10095;</span>
 </div>
 
-<div id="lovePopup">I LOVE YOU ❤️</div>
+<div id="modal" onclick="this.style.display='none'">
+    <img id="modalImg">
+</div>
 
-<audio id="bgMusic" src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" loop></audio>
-<audio id="giftSound" src="https://www.soundjay.com/human/sounds/applause-8.mp3"></audio>
-
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<!-- MUSIC -->
+<audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
 
 <script>
-document.body.classList.add("loaded");
-
-/* Countdown */
-let count = 3;
+/* 10 SECOND COUNTDOWN */
+let count = 10;
 let countdownEl = document.getElementById("countdown");
+let mainContent = document.getElementById("mainContent");
 
 let interval = setInterval(() => {
     count--;
-    if(count === 0){
+    countdownEl.innerText = count;
+    if(count <= 0){
         clearInterval(interval);
         countdownEl.style.display = "none";
-        document.getElementById("mainTitle").style.display = "block";
-        yesBtn.style.display = "inline-block";
-        noBtn.style.display = "inline-block";
-    } else {
-        countdownEl.innerText = count;
+        mainContent.style.display = "block";
     }
 },1000);
 
@@ -226,7 +193,6 @@ let noBtn = document.getElementById("noBtn");
 let message = document.getElementById("message");
 let gifts = document.getElementById("gifts");
 let bgMusic = document.getElementById("bgMusic");
-let giftSound = document.getElementById("giftSound");
 
 let scale = 1;
 
@@ -249,41 +215,20 @@ yesBtn.addEventListener("click", function(){
     bgMusic.play();
 });
 
-/* Gifts */
-let wrappers = document.querySelectorAll(".gift-wrapper");
-let currentIndex = 0;
-
-wrappers.forEach((wrapper,index)=>{
-    wrapper.addEventListener("click",function(){
+/* Gift Logic */
+document.querySelectorAll(".gift-wrapper").forEach(wrapper => {
+    wrapper.addEventListener("click", function(){
         let overlay = this.querySelector(".overlay");
         let img = this.querySelector("img");
 
         if(!overlay.classList.contains("hidden")){
             overlay.classList.add("hidden");
-            giftSound.play();
-            confetti({ particleCount:100, spread:80 });
         } else {
-            openModal(index);
+            document.getElementById("modalImg").src = img.src;
+            document.getElementById("modal").style.display = "flex";
         }
     });
 });
-
-function openModal(index){
-    currentIndex = index;
-    modalImg.src = wrappers[index].querySelector("img").src;
-    modal.style.display = "flex";
-}
-
-modal.onclick = ()=> modal.style.display="none";
-
-prev.onclick = (e)=>{ e.stopPropagation(); currentIndex=(currentIndex-1+wrappers.length)%wrappers.length; openModal(currentIndex); };
-next.onclick = (e)=>{ e.stopPropagation(); currentIndex=(currentIndex+1)%wrappers.length; openModal(currentIndex); };
-
-/* Final Love Popup after 20 seconds */
-setTimeout(()=>{
-    document.getElementById("lovePopup").style.display="flex";
-    setTimeout(()=>{ document.getElementById("lovePopup").style.display="none"; },4000);
-},20000);
 
 /* Floating hearts */
 setInterval(()=>{
