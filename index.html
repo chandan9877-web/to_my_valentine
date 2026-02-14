@@ -260,61 +260,94 @@ wrappers.forEach(wrapper => {
     });
 });
 
-/* 🌹 ROSE ANIMATION */
 function showRoseAnimation(){
 
-    let roseScreen = document.createElement("div");
-    roseScreen.style.position = "fixed";
-    roseScreen.style.inset = "0";
-    roseScreen.style.background = "linear-gradient(to right, #ff4d6d, #ff9a9e)";
-    roseScreen.style.display = "flex";
-    roseScreen.style.flexDirection = "column";
-    roseScreen.style.justifyContent = "center";
-    roseScreen.style.alignItems = "center";
-    roseScreen.style.color = "white";
-    roseScreen.style.fontSize = "35px";
-    roseScreen.style.zIndex = "2000";
-    roseScreen.style.animation = "fadeIn 1s ease";
+    let scene = document.createElement("div");
+    scene.style.position = "fixed";
+    scene.style.inset = "0";
+    scene.style.background = "linear-gradient(to right, #ff4d6d, #ff9a9e)";
+    scene.style.display = "flex";
+    scene.style.justifyContent = "center";
+    scene.style.alignItems = "center";
+    scene.style.zIndex = "3000";
+    scene.style.fontSize = "60px";
+    scene.style.flexDirection = "column";
+    scene.style.color = "white";
 
-    roseScreen.innerHTML = `
-        <div style="font-size:60px;">🌹🌹🌹</div>
-        <div style="margin-top:20px;">These Roses Are For You ❤️</div>
+    scene.innerHTML = `
+        <div id="animationStage" style="position:relative; width:300px; height:150px;">
+            <div id="boy" style="position:absolute; left:0;">👦🌹</div>
+            <div id="girl" style="position:absolute; right:0;">👧</div>
+        </div>
+        <div id="finalText" style="margin-top:30px; font-size:30px;"></div>
     `;
 
-    document.body.appendChild(roseScreen);
+    document.body.appendChild(scene);
 
-    /* Falling rose petals */
-    let petalInterval = setInterval(()=>{
-        let petal = document.createElement("div");
-        petal.innerHTML = "🌹";
-        petal.style.position = "fixed";
-        petal.style.left = Math.random()*100 + "vw";
-        petal.style.fontSize = (Math.random()*25+20)+"px";
-        petal.style.top = "-50px";
-        petal.style.animation = "fall 5s linear forwards";
-        document.body.appendChild(petal);
+    let boy = scene.querySelector("#boy");
+    let girl = scene.querySelector("#girl");
+    let text = scene.querySelector("#finalText");
 
-        setTimeout(()=>petal.remove(),5000);
-    },300);
-
-    /* Add falling animation */
-    let style = document.createElement("style");
-    style.innerHTML = `
-        @keyframes fall {
-            to {
-                transform: translateY(110vh) rotate(360deg);
-                opacity: 0;
-            }
+    /* Boy walks to girl */
+    let walk = setInterval(()=>{
+        let current = parseInt(boy.style.left);
+        if(current < 120){
+            boy.style.left = current + 5 + "px";
+        } else {
+            clearInterval(walk);
+            giveRose();
         }
-    `;
-    document.head.appendChild(style);
+    },40);
 
-    /* Remove screen after 6 sec */
-    setTimeout(()=>{
-        clearInterval(petalInterval);
-        roseScreen.remove();
-    },6000);
+    function giveRose(){
+        boy.innerHTML = "👦";
+        girl.innerHTML = "👧🌹";
+        setTimeout(hug,1000);
+    }
+
+    function hug(){
+        boy.innerHTML = "🤗";
+        girl.innerHTML = "🤗";
+        setTimeout(kiss,1200);
+    }
+
+    function kiss(){
+        boy.innerHTML = "💑";
+        girl.innerHTML = "";
+        text.innerHTML = "Forever With You ❤️";
+        launchHearts();
+    }
+
+    function launchHearts(){
+        let heartInterval = setInterval(()=>{
+            let heart = document.createElement("div");
+            heart.innerHTML = "❤️";
+            heart.style.position = "fixed";
+            heart.style.left = Math.random()*100 + "vw";
+            heart.style.bottom = "0px";
+            heart.style.fontSize = "30px";
+            heart.style.animation = "rise 4s linear forwards";
+            document.body.appendChild(heart);
+            setTimeout(()=>heart.remove(),4000);
+        },300);
+
+        let style = document.createElement("style");
+        style.innerHTML = `
+            @keyframes rise {
+                to {
+                    transform: translateY(-110vh);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        setTimeout(()=>{
+            clearInterval(heartInterval);
+        },5000);
+    }
 }
+
 
 /* Floating hearts */
 setInterval(()=>{
