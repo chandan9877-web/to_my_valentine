@@ -39,6 +39,7 @@ h1{
     -webkit-text-fill-color:transparent;
 }
 
+/* Buttons */
 button{
     padding:12px 25px;
     font-size:16px;
@@ -52,6 +53,7 @@ button{
 #yesBtn{background:#ff4d6d;color:white;}
 #noBtn{background:#555;color:white;position:absolute;}
 
+/* Message */
 #message{
     display:none;
     margin-top:25px;
@@ -62,6 +64,7 @@ button{
     font-weight:500;
 }
 
+/* Gifts */
 .gifts{
     display:none;
     margin-top:40px;
@@ -99,6 +102,7 @@ button{
     pointer-events:none;
 }
 
+/* Modal */
 #modal{
     display:none;
     position:fixed;
@@ -114,6 +118,7 @@ button{
     border-radius:15px;
 }
 
+/* Floating Hearts */
 .heart{
     position:fixed;
     animation:float 6s linear infinite;
@@ -124,10 +129,12 @@ button{
     100%{transform:translateY(-10vh);opacity:0;}
 }
 
+/* Explosion */
 @keyframes explode{
 0%{transform:translate(-50%,-50%) scale(0);opacity:1;}
 100%{transform:translate(var(--x),var(--y)) scale(1.5);opacity:0;}
 }
+
 </style>
 </head>
 
@@ -171,33 +178,9 @@ button{
 
 <script>
 
-    /* AUTO MUSIC (WORKS ON MOBILE + DESKTOP) */
-let bgMusic = document.getElementById("bgMusic");
-bgMusic.volume = 0.4;
-bgMusic.muted = true;
+const herName="My Love"; // change name here
 
-// Try autoplay muted
-window.addEventListener("load", () => {
-    bgMusic.play().catch(()=>{});
-});
-
-// Enable sound on first touch or click
-function enableSound() {
-    bgMusic.muted = false;
-    bgMusic.play().catch(()=>{});
-    document.removeEventListener("click", enableSound);
-    document.removeEventListener("touchstart", enableSound);
-}
-
-document.addEventListener("click", enableSound);
-document.addEventListener("touchstart", enableSound);
-
-
-const herName="My Love";
-
-
-
-/* HEARTS */
+/* HEARTS FROM START */
 function floatingHearts(speed=700){
 setInterval(()=>{
 let heart=document.createElement("div");
@@ -232,6 +215,7 @@ let yesBtn=document.getElementById("yesBtn");
 let noBtn=document.getElementById("noBtn");
 let message=document.getElementById("message");
 let gifts=document.getElementById("gifts");
+let bgMusic=document.getElementById("bgMusic");
 
 noBtn.addEventListener("mouseover",moveNo);
 noBtn.addEventListener("touchstart",e=>{e.preventDefault();moveNo();});
@@ -257,13 +241,25 @@ message.style.display="block";
 message.innerHTML="";
 gifts.style.display="grid";
 noBtn.style.display="none";
-
-
+bgMusic.play();
 
 typeWriter(`
-Firstly Happy Valentine's Day Kandaaaa....♥️
-...
+    Firstly Happy Valentine's Day Kandaaaa....♥️
+Thumba eneno madbeku ankondidde but nam situation inda enu madak aaglilla, in fact idunna modle plan madidde but nimmatra mathadak aagde Nan mentally thumba disturb aagthiddini adikke ee plan kai bittide. But madhyana nimmatra mathadudmele idun nimgoskara madlebeku ansthu adikke idu Nimagaagi (trust me this is not 100% what I had planned and thumba limited time alli madiradu idunna). And neev heeg irodakke nan mind completely disturb aagide kanda, adu nimna meet aagi nimna gattiyaagi thapkolovargu sari hogalla because I'm Missing Soooo badly. I hope that time comes soon....
+
+Let's come to the main part
+
+Mainly nang Valentine's Day mele asht craze illa because that is not the only day I Love You....
+I Love You Everyday, Every Minutes, Every Seconds of my life....♥️
+I Loveeee Youuuu Forever Kandaaaa....♥️♾️
+
+
+
+Once you are done with reading this, click one each gift box and open and see how beautiful moments were those, and trust me together we can create best moments of our lives.
+
 Once again Happy Valentine's Day to my Valentine...💋♥️
+
+
 `);
 });
 
@@ -292,8 +288,6 @@ document.getElementById("modal").style.display="flex";
 /* FINAL PROPOSAL */
 function showProposal(){
 
-
-
 mainContent.classList.add("blur");
 
 let scene=document.createElement("div");
@@ -308,12 +302,24 @@ scene.style.zIndex="9999";
 
 scene.innerHTML=`
 <div style="font-size:80px;">👧 💍 🧎‍♂️ ➝ 👩🏼‍❤️‍💋‍👨🏼</div>
-<div style="margin-top:25px;font-size:34px;color:white;font-weight:bold;text-align:center;padding:20px;max-width:90%;">
+
+<div style="margin-top:25px;
+font-size:34px;
+color:white;
+font-weight:bold;
+text-align:center;
+padding:20px;
+max-width:90%;">
+
 Kandaaaaaaaaa, naan irovargu nan jothe irthira ? 💖
+
 <br><br>
+
 Ummmmmmmmmmmmmmmmaaaaaaaaaaaaaaaaaaaaaa 💋💋💋💋
+
 <br><br>
-Pleaseeee ?
+
+Pleaseeee....
 </div>
 `;
 
@@ -322,6 +328,8 @@ document.body.appendChild(scene);
 heartExplosion();
 }
 
+
+/* Explosion */
 function heartExplosion(){
 for(let i=0;i<70;i++){
 let heart=document.createElement("div");
